@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Functional</title>
+    <style>
+        /* Add your CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .task {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .title {
+            font-weight: bold;
+            color: #333;
+        }
+        .description {
+            color: #666;
+        }
+        .status {
+            color: #007bff;
+            font-weight: bold;
+        }
+        .priority {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        .due-date {
+            color: #28a745;
+            font-weight: bold;
+        }
+        .created-at {
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Functional:Your Todo List</h1>
+
+        <!-- Form for creating new task -->
+        <form method="post">
+            {% csrf_token %}
+            <label for="title">Title:</label><br>
+            <input type="text" id="title" name="title"><br>
+            
+            
+            <label for="status">Status:</label><br>
+            <input type="text" id="status" name="status" value="pending"><br>
+            
+            
+            <label for="due_date">Due Date:</label><br>
+            <input type="date" id="due_date" name="due_date"><br>
+            <br>
+            <button type="submit">Add Task</button>
+        </form>
+
+        <br>
+        <!-- Display existing tasks -->
+        {% for task in tasks %}
+                <div class="task">
+                    <div class="title">Title: {{ task.title }}</div>
+                    <!-- <div class="description">Description: {{ task.description }}</div> -->
+                    <div class="status">Status: {{ task.status }}</div>
+                    <div class="due-date">Due Date: {{ task.due_date }}</div>
+                    <div class="created-at">Created At: {{ task.created_at }}</div>
+                    <br>
+                    <div class="button" style="display: flex;">
+                        <form action="{% url 'delete' task.title %}" method="post" style="margin-right: 10px;">
+                            {% csrf_token %}
+                            <button type="submit">Delete</button>
+                        </form>
+                        <form action="{% url 'update' task.title %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit">Update</button>
+                        </form>
+                    </div>                   
+                </div>
+        {% empty %}
+            <p>No tasks found.</p>
+        {% endfor %}
+    </div>
+</body>
+</html>
